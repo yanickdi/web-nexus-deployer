@@ -5,7 +5,7 @@
   "homepage": "https://github.com/cthorne66/nexus-deployer",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/cthorne66/nexus-deployer.git"
+    "url": "http://git@github.com/cthorne66/nexus-deployer.git"
   },
   "bugs": {
     "url": "https://github.com/cthorne66/nexus-deployer/issues"
