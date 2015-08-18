@@ -2,6 +2,9 @@ node_modules
 npm-debug.log
 tmp
 .idea
-test/pom
+test/actual/nodeReleases
+test/actual/releases
+test/actual/nodeSnapshots
+test/actual/snapshots
 
 

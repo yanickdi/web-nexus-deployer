@@ -1,0 +1,1 @@
+This directory will contain actual artifact results from tests

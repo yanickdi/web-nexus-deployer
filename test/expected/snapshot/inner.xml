@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+    <groupId>nexus-deployer</groupId>
+    <artifactId>nexus-deployer</artifactId>
+    <version>1.2-SNAPSHOT</version>
+    <versioning>
+        <lastUpdated>11111111111111</lastUpdated>
+    </versioning>
+</metadata>

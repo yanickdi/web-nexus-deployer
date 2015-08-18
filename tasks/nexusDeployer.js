@@ -8,7 +8,7 @@
 
 'use strict';
 
-var format = require('util').format, deploy = require('./lib');
+var deploy = require('./lib');
 
 module.exports = function (grunt) {
 

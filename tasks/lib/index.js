@@ -1,13 +1,15 @@
 'use strict';
 
-var ejs = require('ejs')
-    , exec
-    , dateformat = require('dateformat')
-    , crypto = require('crypto')
-    , async = require('async')
-    , grunt = require('grunt')
-    , file = grunt.file
-    , log = grunt.log;
+var ejs = require('ejs');
+var dateformat = require('dateformat');
+var crypto = require('crypto');
+var async = require('async');
+var fs = require("fs");
+var chalk = require('chalk');
+var path = require('path');
+
+var exec;
+
 
 ejs.open = "{{";
 ejs.close = "}}";
@@ -15,7 +17,7 @@ ejs.close = "}}";
 var cwd = __dirname;
 
 var createFile = function (template, options) {
-    var outerMetadata = file.read(cwd + '/../template/' + template);
+    var outerMetadata = fs.readFileSync(path.resolve(cwd, '../template/' + template)).toString();
     var metadata = ejs.render(outerMetadata, options);
     return metadata;
 };
@@ -31,17 +33,17 @@ var sha1 = function (str) {
 };
 
 var save = function (fileContent, pomDir, fileName) {
-    file.write(pomDir + '/' + fileName, fileContent);
-    file.write(pomDir + '/' + fileName + '.md5', md5(fileContent));
-    file.write(pomDir + '/' + fileName + '.sha1', sha1(fileContent));
+    fs.writeFileSync(pomDir + '/' + fileName, fileContent);
+    fs.writeFileSync(pomDir + '/' + fileName + '.md5', md5(fileContent));
+    fs.writeFileSync(pomDir + '/' + fileName + '.sha1', sha1(fileContent));
 };
 
 var createAndUploadArtifacts = function (options, done) {
     var pomDir = options.pomDir || 'test/poms';
 
     options.parallel = options.parallel === undefined ? false : options.parallel;
-    if (!file.exists(pomDir)) {
-        file.mkdir(pomDir);
+    if (!fs.exists(pomDir)) {
+        fs.mkdir(pomDir);
     }
 
 
@@ -49,15 +51,15 @@ var createAndUploadArtifacts = function (options, done) {
     save(createFile('latest-metadata.xml', options), pomDir, 'inner.xml');
     save(createFile('pom.xml', options), pomDir, 'pom.xml');
 
-    var artifactData = file.read(options.artifact, {encoding: 'binary'});
-    file.write(pomDir + '/artifact.' + options.packaging + '.md5', md5(artifactData));
-    file.write(pomDir + '/artifact.' + options.packaging + '.sha1', sha1(artifactData));
+    var artifactData = fs.readFileSync(options.artifact, {encoding: 'binary'});
+    fs.writeFileSync(pomDir + '/artifact.' + options.packaging + '.md5', md5(artifactData));
+    fs.writeFileSync(pomDir + '/artifact.' + options.packaging + '.sha1', sha1(artifactData));
 
     var upload = function (fileLocation, targetFile) {
         var uploadArtifact = function (cb) {
             var targetUri = options.url + '/' + targetFile, status;
             if (!options.quiet) {
-                log.write('Uploading to ' + targetUri + "\n\n");
+                console.log(chalk.blue('Uploading to ' + targetUri + "\n\n"));
             }
 
             var curlOptions = [
@@ -140,11 +142,11 @@ var createAndUploadArtifacts = function (options, done) {
     var asyncFn = options.parallel ? async.parallel : async.series;
     asyncFn(fns, function (err) {
         if (!options.quiet) {
-            log.write('-------------------------------------------\n');
+            console.log(chalk.blue('-------------------------------------------\n'));
             if (err) {
-                log.error('Artifact Upload failed\n' + String(err));
+                console.log(chalk.red('Artifact Upload failed\n' + String(err)));
             } else {
-                log.ok('Artifacts uploaded successfully');
+                console.log(chalk.green('Artifacts uploaded successfully'));
             }
         }
         done(err ? false : true);
