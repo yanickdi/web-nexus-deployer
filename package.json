@@ -1,11 +1,11 @@
 {
   "name": "nexus-deployer",
   "description": "Deploy artifacts with classifiers to release/snapshot maven repository.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/cthorne66/nexus-deployer",
   "repository": {
     "type": "git",
-    "url": "git@github.com:cthorne66/nexus-deployer.git"
+    "url": "git+ssh://git@github.com/cthorne66/nexus-deployer.git"
   },
   "bugs": {
     "url": "https://github.com/cthorne66/nexus-deployer/issues"
@@ -44,5 +44,11 @@
     "nexus",
     "maven",
     "deployer"
-  ]
+  ],
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "author": "Chris Thorne",
+  "license": "MIT"
 }

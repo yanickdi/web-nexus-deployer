@@ -2,9 +2,9 @@
 
 > Nexus Artifact Deployer from grunt
 
-[![Build Status](https://travis-ci.org/skhatri/nexus-deployer.png)](https://travis-ci.org/skhatri/nexus-deployer) 
+[![Build Status](https://travis-ci.org/cthorne66/nexus-deployer.png)](https://travis-ci.org/cthorne66/nexus-deployer) 
 [![NPM version](https://badge.fury.io/js/nexus-deployer.png)](http://npmjs.org/package/nexus-deployer)
-[![Dependency Status](https://david-dm.org/skhatri/nexus-deployer.png)](https://david-dm.org/skhatri/nexus-deployer)
+[![Dependency Status](https://david-dm.org/cthorne66/nexus-deployer.png)](https://david-dm.org/cthorne66/nexus-deployer)
 ## Getting Started
 This plugin requires Grunt `~0.4.2`
 
