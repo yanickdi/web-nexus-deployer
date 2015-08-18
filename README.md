@@ -3,16 +3,90 @@
 > Nexus Artifact Deployer from grunt
 
 [![Build Status](https://travis-ci.org/cthorne66/nexus-deployer.png)](https://travis-ci.org/cthorne66/nexus-deployer) 
-[![NPM version](https://badge.fury.io/js/nexus-deployer.png)](http://npmjs.org/package/nexus-deployer)
+[![npm version](https://badge.fury.io/js/nexus-deployer.svg)](http://badge.fury.io/js/nexus-deployer)
 [![Dependency Status](https://david-dm.org/cthorne66/nexus-deployer.png)](https://david-dm.org/cthorne66/nexus-deployer)
 ## Getting Started
+
+To install
+```shell
+npm install nexus-deployer --save-dev
+```
+
+From there, you have options
+
+1. Run with Node
+2. Run with Gulp
+2. Run with Grunt
+
+## Running with Node
+
+```js
+var deployer = require('nexus-deployer');
+
+var release = {
+    groupId: 'nexus-deployer',
+    artifactId: 'nexus-deployer',
+    version: '1.0',
+    packaging: 'zip',
+    auth: {
+      username:'admin',
+      password:'admin123'
+    },
+    pomDir: 'build/pom',
+    url: 'http://localhost:8081/nexus/content/repositories/releases',
+    artifact: 'build/nexus-deployer.zip',
+    noproxy: 'localhost',
+    cwd: ''
+};
+
+
+deployer.deploy(release, function(){
+    // your async call back here
+    // done();
+});
+
+```
+
+
+## Running with Gulp
+
+```js
+var deployer = require('nexus-deployer');
+
+// dont forget to create a task to actually generate the artifact as assumed
+// here with the dependent 'artifacts:generate' task
+gulp.task('deploy:artifacts', ['artifacts:generate'], function(callback) {
+  
+    var snapshot = {
+        groupId: 'nexus-deployer',
+        artifactId: 'nexus-deployer',
+        version: '1.2-SNAPSHOT',
+        packaging: 'zip',
+        auth: {
+            username:'admin',
+            password:'admin123'
+        },
+        pomDir: 'build/pom',
+        url: 'http://localhost:8081/nexus/content/repositories/snapshots',
+        artifact: 'build/nexus-deployer.zip',
+        noproxy: 'localhost',
+        cwd: '',
+        quiet: false,
+        insecure: true
+    };
+
+    deployer.deploy(snapshot, callback);
+
+});
+```
+
+
+## Running with Grunt
 This plugin requires Grunt `~0.4.2`
 
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
-```shell
-npm install nexus-deployer --save-dev
-```
+
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
