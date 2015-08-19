@@ -149,7 +149,7 @@ var createAndUploadArtifacts = function (options, done) {
                 console.log(chalk.green('Artifacts uploaded successfully'));
             }
         }
-        done(err ? false : true);
+        done(err);
     });
 
 };
