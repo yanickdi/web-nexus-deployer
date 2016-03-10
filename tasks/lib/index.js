@@ -72,7 +72,7 @@ var createAndUploadArtifacts = function (options, done) {
 
             if (options.auth) {
                 curlOptions.push('-u');
-                curlOptions.push(options.auth.username + ":" + options.auth.password);
+                curlOptions.push('"'+options.auth.username + ":" + options.auth.password+'"');
             }
 
             if (options.insecure) {
