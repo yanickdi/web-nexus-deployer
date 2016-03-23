@@ -7,6 +7,7 @@ var async = require('async');
 var fs = require("fs");
 var chalk = require('chalk');
 var path = require('path');
+var mkdirp = require('mkdirp');
 
 var exec;
 
@@ -33,6 +34,7 @@ var sha1 = function (str) {
 };
 
 var save = function (fileContent, pomDir, fileName) {
+    mkdirp.sync(pomDir);
     fs.writeFileSync(pomDir + '/' + fileName, fileContent);
     fs.writeFileSync(pomDir + '/' + fileName + '.md5', md5(fileContent));
     fs.writeFileSync(pomDir + '/' + fileName + '.sha1', sha1(fileContent));
