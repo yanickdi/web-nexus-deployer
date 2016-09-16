@@ -113,16 +113,21 @@ var createAndUploadArtifacts = function (options, done) {
 
 
     var artifactStream = fs.createReadStream(options.artifact);
-    var artifactData = '';
+    var md5Hash = crypto.createHash('md5');
+    var sha1Hash = crypto.createHash('sha1');
 
     artifactStream.on('data', function(chunk) {
-        artifactData = artifactData + chunk.toString('binary');
+
+        var binaryChunk = chunk.toString('binary');
+
+        md5Hash.update(binaryChunk);
+        sha1Hash.update(binaryChunk);
     });
 
     artifactStream.on('end', function() {
 
-        fs.writeFileSync(pomDir + '/artifact.' + options.packaging + '.md5', md5(artifactData));
-        fs.writeFileSync(pomDir + '/artifact.' + options.packaging + '.sha1', sha1(artifactData));
+        fs.writeFileSync(pomDir + '/artifact.' + options.packaging + '.md5', md5Hash.digest('hex'));
+        fs.writeFileSync(pomDir + '/artifact.' + options.packaging + '.sha1', sha1Hash.digest('hex'));
 
         var uploads = {};
 
