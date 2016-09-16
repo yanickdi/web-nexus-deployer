@@ -65,9 +65,6 @@ var createAndUploadArtifacts = function (options, done) {
     save(createFile('latest-metadata.xml', options), pomDir, 'inner.xml');
     save(createFile('pom.xml', options), pomDir, 'pom.xml');
 
-    var artifactData = fs.readFileSync(options.artifact, {encoding: 'binary'});
-    fs.writeFileSync(pomDir + '/artifact.' + options.packaging + '.md5', md5(artifactData));
-    fs.writeFileSync(pomDir + '/artifact.' + options.packaging + '.sha1', sha1(artifactData));
 
     var upload = function (fileLocation, targetFile) {
         var uploadArtifact = function (cb) {
@@ -114,56 +111,71 @@ var createAndUploadArtifacts = function (options, done) {
         return uploadArtifact;
     };
 
-    var uploads = {};
 
-    var groupIdAsPath = options.groupId.replace(/\./g, "/");
-    var groupArtifactPath = groupIdAsPath + '/' + options.artifactId;
+    var artifactStream = fs.createReadStream(options.artifact);
+    var artifactData = '';
 
-    uploads[pomDir + "/outer.xml"] = groupArtifactPath + '/' + 'maven-metadata.xml';
-    uploads[pomDir + "/outer.xml.sha1"] = groupArtifactPath + '/' + 'maven-metadata.xml.sha1';
-    uploads[pomDir + "/outer.xml.md5"] = groupArtifactPath + '/' + 'maven-metadata.xml.md5';
+    artifactStream.on('data', function(chunk) {
+        artifactData = artifactData + chunk.toString('binary');
+    });
 
-    var SNAPSHOT_VER = /.*SNAPSHOT$/i;
+    artifactStream.on('end', function() {
 
-    var groupArtifactVersionPath = groupArtifactPath + '/' + options.version;
-    if (SNAPSHOT_VER.test(options.version)) {
-        uploads[pomDir + "/inner.xml"] = groupArtifactVersionPath + '/' + 'maven-metadata.xml';
-        uploads[pomDir + "/inner.xml.sha1"] = groupArtifactVersionPath + '/' + 'maven-metadata.xml.sha1';
-        uploads[pomDir + "/inner.xml.md5"] = groupArtifactVersionPath + '/' + 'maven-metadata.xml.md5';
-    }
+        fs.writeFileSync(pomDir + '/artifact.' + options.packaging + '.md5', md5(artifactData));
+        fs.writeFileSync(pomDir + '/artifact.' + options.packaging + '.sha1', sha1(artifactData));
 
-    var remoteArtifactName = options.artifactId + '-' + options.version;
-    uploads[pomDir + "/pom.xml"] = groupArtifactVersionPath + '/' + remoteArtifactName + '.pom';
-    uploads[pomDir + "/pom.xml.sha1"] = groupArtifactVersionPath + '/' + remoteArtifactName + '.pom.sha1';
-    uploads[pomDir + "/pom.xml.md5"] = groupArtifactVersionPath + '/' + remoteArtifactName + '.pom.md5';
+        var uploads = {};
 
+        var groupIdAsPath = options.groupId.replace(/\./g, "/");
+        var groupArtifactPath = groupIdAsPath + '/' + options.artifactId;
 
-    if(options.classifier) {
-        remoteArtifactName = remoteArtifactName + "-" + options.classifier;
-    }
-    uploads[options.artifact] = groupArtifactVersionPath + '/' + remoteArtifactName + '.' + options.packaging;
-    uploads[pomDir + "/artifact." + options.packaging + ".sha1"] = groupArtifactVersionPath + '/' + remoteArtifactName + '.' + options.packaging + '.sha1';
-    uploads[pomDir + "/artifact." + options.packaging + ".md5"] = groupArtifactVersionPath + '/' + remoteArtifactName + '.' + options.packaging + '.md5';
+        uploads[pomDir + "/outer.xml"] = groupArtifactPath + '/' + 'maven-metadata.xml';
+        uploads[pomDir + "/outer.xml.sha1"] = groupArtifactPath + '/' + 'maven-metadata.xml.sha1';
+        uploads[pomDir + "/outer.xml.md5"] = groupArtifactPath + '/' + 'maven-metadata.xml.md5';
 
+        var SNAPSHOT_VER = /.*SNAPSHOT$/i;
 
-    var fns = [];
-    for (var u in uploads) {
-        if (uploads.hasOwnProperty(u)) {
-            fns.push(upload(u, uploads[u]));
+        var groupArtifactVersionPath = groupArtifactPath + '/' + options.version;
+        if (SNAPSHOT_VER.test(options.version)) {
+            uploads[pomDir + "/inner.xml"] = groupArtifactVersionPath + '/' + 'maven-metadata.xml';
+            uploads[pomDir + "/inner.xml.sha1"] = groupArtifactVersionPath + '/' + 'maven-metadata.xml.sha1';
+            uploads[pomDir + "/inner.xml.md5"] = groupArtifactVersionPath + '/' + 'maven-metadata.xml.md5';
         }
-    }
 
-    var asyncFn = options.parallel ? async.parallel : async.series;
-    asyncFn(fns, function (err) {
-        if (!options.quiet) {
-            console.log(chalk.blue('-------------------------------------------\n'));
-            if (err) {
-                console.log(chalk.red('Artifact Upload failed\n' + String(err)));
-            } else {
-                console.log(chalk.green('Artifacts uploaded successfully'));
+        var remoteArtifactName = options.artifactId + '-' + options.version;
+        uploads[pomDir + "/pom.xml"] = groupArtifactVersionPath + '/' + remoteArtifactName + '.pom';
+        uploads[pomDir + "/pom.xml.sha1"] = groupArtifactVersionPath + '/' + remoteArtifactName + '.pom.sha1';
+        uploads[pomDir + "/pom.xml.md5"] = groupArtifactVersionPath + '/' + remoteArtifactName + '.pom.md5';
+
+
+        if(options.classifier) {
+            remoteArtifactName = remoteArtifactName + "-" + options.classifier;
+        }
+        uploads[options.artifact] = groupArtifactVersionPath + '/' + remoteArtifactName + '.' + options.packaging;
+        uploads[pomDir + "/artifact." + options.packaging + ".sha1"] = groupArtifactVersionPath + '/' + remoteArtifactName + '.' + options.packaging + '.sha1';
+        uploads[pomDir + "/artifact." + options.packaging + ".md5"] = groupArtifactVersionPath + '/' + remoteArtifactName + '.' + options.packaging + '.md5';
+
+
+        var fns = [];
+        for (var u in uploads) {
+            if (uploads.hasOwnProperty(u)) {
+                fns.push(upload(u, uploads[u]));
             }
         }
-        done(err);
+
+        var asyncFn = options.parallel ? async.parallel : async.series;
+        asyncFn(fns, function (err) {
+            if (!options.quiet) {
+                console.log(chalk.blue('-------------------------------------------\n'));
+                if (err) {
+                    console.log(chalk.red('Artifact Upload failed\n' + String(err)));
+                } else {
+                    console.log(chalk.green('Artifacts uploaded successfully'));
+                }
+            }
+            done(err);
+        });
+
     });
 
 };
