@@ -124,6 +124,11 @@ var createAndUploadArtifacts = function (options, done) {
         sha1Hash.update(binaryChunk);
     });
 
+    artifactStream.on('error', function(error) {
+        console.log(chalk.red(error));
+        done(error);
+    });
+
     artifactStream.on('end', function() {
 
         fs.writeFileSync(pomDir + '/artifact.' + options.packaging + '.md5', md5Hash.digest('hex'));
