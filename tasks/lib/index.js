@@ -104,7 +104,7 @@ var createAndUploadArtifacts = function (options, done) {
                 status = data;
             });
             childProcess.on('close', function (code) {
-                if (status.substring(0, 1) == "2" || code == 0) {
+                if ((status && status.substring(0, 1) == "2") || code == 0) {
                     cb(null, "Ok");
                 } else  {
                     cb("Status code " + status + " for " + targetUri, null);
