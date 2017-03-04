@@ -95,13 +95,16 @@ var createAndUploadArtifacts = function (options, done) {
 
             var curlCmd = ['curl', curlOptions.join(' '), targetUri].join(' ');
 
-            var childProcess = exec(curlCmd, execOptions, function () {
+            var childProcess = exec(curlCmd, execOptions, function (error) {
+                if (error) {
+                    console.log(chalk.red(error));
+                }
             });
             childProcess.stdout.on('data', function (data) {
                 status = data;
             });
             childProcess.on('close', function (code) {
-                if (status.substring(0, 1) == "2" || code == 0) {
+                if ((status && status.substring(0, 1) == "2") || code == 0) {
                     cb(null, "Ok");
                 } else  {
                     cb("Status code " + status + " for " + targetUri, null);
