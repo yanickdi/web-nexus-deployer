@@ -95,7 +95,10 @@ var createAndUploadArtifacts = function (options, done) {
 
             var curlCmd = ['curl', curlOptions.join(' '), targetUri].join(' ');
 
-            var childProcess = exec(curlCmd, execOptions, function () {
+            var childProcess = exec(curlCmd, execOptions, function (error) {
+                if (error) {
+                    console.log(chalk.red(error));
+                }
             });
             childProcess.stdout.on('data', function (data) {
                 status = data;
