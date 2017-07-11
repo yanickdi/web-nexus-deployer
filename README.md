@@ -1,6 +1,6 @@
 # web-nexus-deployer
 
-> Nexus Artifact Deployer from grunt
+> Nexus Artifact Deployer from gulp task and Node
 
 ## Getting Started
 
@@ -167,7 +167,3 @@ Type: `Boolean`
 Default value: `'false'`
 
 Chatty flag.
-
-### Usage Examples
-
-## Release History
