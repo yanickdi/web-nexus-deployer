@@ -1,7 +1,7 @@
 {
   "name": "web-nexus-deployer",
   "description": "Deploy artifacts with classifiers to release/snapshot proyect repository.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/agonsant/web-nexus-deployer",
   "repository": {
     "type": "git",
