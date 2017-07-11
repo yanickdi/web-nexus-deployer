@@ -1,4 +1,4 @@
-# web-web-nexus-deployer
+# web-nexus-deployer
 
 > Nexus Artifact Deployer from grunt
 
@@ -6,7 +6,7 @@
 
 To install
 ```shell
-npm install web-web-nexus-deployer --save-dev
+npm install web-nexus-deployer --save-dev
 ```
 
 From there, you have options
