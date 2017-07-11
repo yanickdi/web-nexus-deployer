@@ -1,19 +1,19 @@
 {
   "name": "web-nexus-deployer",
-  "description": "Deploy artifacts with classifiers to release/snapshot maven repository.",
-  "version": "0.1.7",
-  "homepage": "https://github.com/cthorne66/nexus-deployer",
+  "description": "Deploy artifacts with classifiers to release/snapshot proyect repository.",
+  "version": "1.0.0",
+  "homepage": "https://github.com/AlexGonzalezS/web-nexus-deployer",
   "repository": {
     "type": "git",
-    "url": "http://git@github.com/cthorne66/nexus-deployer.git"
+    "url": "http://git@github.com:AlexGonzalezS/web-nexus-deployer.git"
   },
   "bugs": {
-    "url": "https://github.com/cthorne66/nexus-deployer/issues"
+    "url": "https://github.com/AlexGonzalezS/web-nexus-deployer/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/cthorne66/nexus-deployer/blob/master/LICENSE-MIT"
+      "url": "https://github.com/AlexGonzalezS/web-nexus-deployer/blob/master/LICENSE-MIT"
     }
   ],
   "scripts": {
@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "async": "0.9.0",
-    "chalk": "^1.1.0",
     "dateformat": "1.0.11",
     "ejs": "~2.3.1",
     "extend": "^3.0.0",
@@ -41,13 +40,12 @@
   },
   "keywords": [
     "nexus",
-    "maven",
     "deployer"
   ],
   "main": "index.js",
   "directories": {
     "test": "test"
   },
-  "author": "Chris Thorne",
+  "author": "Alex González",
   "license": "MIT"
 }

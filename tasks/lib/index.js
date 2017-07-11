@@ -5,7 +5,6 @@ var dateformat = require('dateformat');
 var crypto = require('crypto');
 var async = require('async');
 var fs = require("fs");
-var chalk = require('chalk');
 var path = require('path');
 var mkdirp = require('mkdirp');
 
@@ -70,7 +69,7 @@ var createAndUploadArtifacts = function (options, done) {
         var uploadArtifact = function (cb) {
             var targetUri = options.url + '/' + targetFile, status;
             if (!options.quiet) {
-                console.log(chalk.blue('Uploading to ' + targetUri + "\n\n"));
+                console.log('Uploading to ' + targetUri + "\n\n");
             }
 
             var curlOptions = [
@@ -97,7 +96,7 @@ var createAndUploadArtifacts = function (options, done) {
 
             var childProcess = exec(curlCmd, execOptions, function (error) {
                 if (error) {
-                    console.log(chalk.red(error));
+                    console.log(error);
                 }
             });
             childProcess.stdout.on('data', function (data) {
@@ -128,7 +127,7 @@ var createAndUploadArtifacts = function (options, done) {
     });
 
     artifactStream.on('error', function(error) {
-        console.log(chalk.red(error));
+        console.log(error);
         done(error);
     });
 
@@ -179,11 +178,11 @@ var createAndUploadArtifacts = function (options, done) {
         var asyncFn = options.parallel ? async.parallel : async.series;
         asyncFn(fns, function (err) {
             if (!options.quiet) {
-                console.log(chalk.blue('-------------------------------------------\n'));
+                console.log('-------------------------------------------\n');
                 if (err) {
-                    console.log(chalk.red('Artifact Upload failed\n' + String(err)));
+                    console.log('Artifact Upload failed\n' + String(err));
                 } else {
-                    console.log(chalk.green('Artifacts uploaded successfully'));
+                    console.log('Artifacts uploaded successfully');
                 }
             }
             done(err);
