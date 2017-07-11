@@ -1,5 +1,5 @@
 {
-  "name": "nexus-deployer",
+  "name": "web-nexus-deployer",
   "description": "Deploy artifacts with classifiers to release/snapshot maven repository.",
   "version": "0.1.7",
   "homepage": "https://github.com/cthorne66/nexus-deployer",
