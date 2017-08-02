@@ -115,7 +115,6 @@ var createAndUploadArtifacts = function (options, done) {
             });
         };
         return uploadArtifact;
-        return uploadArtifact;
     };
 
 
