@@ -118,7 +118,7 @@ var createAndUploadArtifacts = function (options, done) {
     };
 
 
-    var artifactStream = fs.createReadStream(options.artifact, {encoding: null});
+    var artifactStream = fs.createReadStream(options.artifact);
     var md5Hash = crypto.createHash('md5');
     var sha1Hash = crypto.createHash('sha1');
 
