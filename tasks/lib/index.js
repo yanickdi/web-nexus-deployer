@@ -118,16 +118,14 @@ var createAndUploadArtifacts = function (options, done) {
     };
 
 
-    var artifactStream = fs.createReadStream(options.artifact);
+    var artifactStream = fs.createReadStream(options.artifact, {encoding: null});
     var md5Hash = crypto.createHash('md5');
     var sha1Hash = crypto.createHash('sha1');
 
     artifactStream.on('data', function(chunk) {
 
-        var binaryChunk = chunk.toString('binary');
-
-        md5Hash.update(binaryChunk);
-        sha1Hash.update(binaryChunk);
+        md5Hash.update(chunk);
+        sha1Hash.update(chunk);
     });
 
     artifactStream.on('error', function(error) {
