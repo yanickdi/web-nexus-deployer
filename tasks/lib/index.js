@@ -15,6 +15,7 @@ ejs.open = "{{";
 ejs.close = "}}";
 
 var cwd = __dirname;
+var isWin = /^win/.test(process.platform);
 
 var createFile = function (template, options) {
     var outerMetadata = fs.readFileSync(path.resolve(cwd, '../template/' + template)).toString();
@@ -73,13 +74,14 @@ var createAndUploadArtifacts = function (options, done) {
             }
 
             var curlOptions = [
-                '--silent',
-                '--output', '/dev/stderr',
                 '--write-out', '"%{http_code}"',
                 '--upload-file', fileLocation,
                 '--noproxy', options.noproxy ? options.noproxy : '127.0.0.1'
             ];
-
+			if (!isWin) {
+				curlOptions.push('--output');
+				curlOptions.push('/dev/stderr');
+			}
             if (options.auth) {
                 curlOptions.push('-u');
                 curlOptions.push('"'+options.auth.username + ":" + options.auth.password+'"');
@@ -120,10 +122,8 @@ var createAndUploadArtifacts = function (options, done) {
 
     artifactStream.on('data', function(chunk) {
 
-        var binaryChunk = chunk.toString('binary');
-
-        md5Hash.update(binaryChunk);
-        sha1Hash.update(binaryChunk);
+        md5Hash.update(chunk);
+        sha1Hash.update(chunk);
     });
 
     artifactStream.on('error', function(error) {
