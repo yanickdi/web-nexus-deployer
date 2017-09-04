@@ -102,7 +102,7 @@ var createAndUploadArtifacts = function (options, done) {
                 }
             });
             childProcess.stdout.on('data', function (data) {
-                status = data;
+                status = data ? data.toString() : "";
             });
             childProcess.on('close', function (code) {
                 if ((status && status.substring(0, 1) == "2") || code == 0) {
