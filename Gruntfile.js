@@ -17,7 +17,11 @@ module.exports = function (grunt) {
                 packaging: 'zip',
                 auth: {
                     username: auth.username,
-                    password: auth.password
+                    password: auth.password,
+                    headers: {
+                        'Authorization': 'Bearer token123',
+                        'Private-Token': 'secret-api-token'
+                    }
                 },
                 pomDir: 'test/actual/releases',
                 url: 'http://localhost:8081/nexus/content/repositories/releases',

@@ -123,6 +123,14 @@ Default value: `''`
 
 Username to be used for authentication against nexus server
 
+#### options.auth.headers
+Type: `Object`
+Default value: `{}`
+
+A key-value pair where each will be passed as Http Request Header to authenticate against nexus server.
+E.g. Personal Access Token instead of username/password:
+`{Authorization: 'Bearer secret-token'}`
+
 #### options.insecure
 Type: `boolean`
 Default value: `false`

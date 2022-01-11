@@ -83,8 +83,16 @@ var createAndUploadArtifacts = function (options, done) {
 				curlOptions.push('/dev/stderr');
 			}
             if (options.auth) {
-                curlOptions.push('-u');
-                curlOptions.push('"'+options.auth.username + ":" + options.auth.password+'"');
+                if (options.auth.username && options.auth.password) {
+                    curlOptions.push('-u');
+                    curlOptions.push('"' + options.auth.username + ":" + options.auth.password + '"');
+                }
+                if (options.auth.headers) {
+                    Object.keys(options.auth.headers).map(function (key) {
+                        curlOptions.push('--header');
+                        curlOptions.push('"' + key + ': ' + options.auth.headers[key] + '"');
+                    });
+                }
             }
 
             if (options.insecure) {
